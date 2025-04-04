@@ -16,13 +16,16 @@ rails-base contains common dependencies that our applications use. You can use `
 
 Here is a list of base images with older versions of Ruby:
 
-```ruby
+```
 public.ecr.aws/degica/rails-base:3.1.4
 public.ecr.aws/degica/rails-base:3.2.1
 public.ecr.aws/degica/rails-base:3.2.2
 public.ecr.aws/degica/rails-base:3.2.3
 public.ecr.aws/degica/rails-base:3.2.4
-public.ecr.aws/degica/rails-base:3.3.0
+public.ecr.aws/degica/rails-base:3.2.6
+public.ecr.aws/degica/rails-base:3.3.1
+public.ecr.aws/degica/rails-base:3.4.0
+public.ecr.aws/degica/rails-base:3.4.1
 ```
 
 
@@ -35,7 +38,7 @@ You can use `rails-buildpack` for your CI or builder of a multi-stage build.
 
 Here is a list of buildpacks with older versions of Ruby:
 
-```ruby
+```
 public.ecr.aws/degica/rails-buildpack:2.7
 public.ecr.aws/degica/rails-buildpack:2.7.3
 public.ecr.aws/degica/rails-buildpack:2.7.5
@@ -47,7 +50,11 @@ public.ecr.aws/degica/rails-buildpack:3.2.1
 public.ecr.aws/degica/rails-buildpack:3.2.2
 public.ecr.aws/degica/rails-buildpack:3.2.3
 public.ecr.aws/degica/rails-buildpack:3.2.4
+public.ecr.aws/degica/rails-buildpack:3.2.6
 public.ecr.aws/degica/rails-buildpack:3.3.0
+public.ecr.aws/degica/rails-buildpack:3.3.1
+public.ecr.aws/degica/rails-buildpack:3.4.0
+public.ecr.aws/degica/rails-buildpack:3.4.1
 ```
 
 Additional older buildpacks can be found at https://gallery.ecr.aws/degica/rails-buildpack
@@ -55,7 +62,7 @@ Additional older buildpacks can be found at https://gallery.ecr.aws/degica/rails
 # Multi-stage example build
 
 ```
-FROM degica/rails-buildpack:2.6 AS builder
+FROM degica/rails-buildpack:3.4.2 AS builder
 
 COPY Gemfile $APP_HOME/
 COPY Gemfile.lock $APP_HOME/
@@ -70,7 +77,7 @@ ADD . $APP_HOME
 RUN bundle exec rake assets:precompile RAILS_ENV=production
 
 
-FROM degica/rails-base:2.6
+FROM degica/rails-base:3.4.2
 
 ENV APP_HOME=/app
 
