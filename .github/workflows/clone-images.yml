@@ -1,4 +1,11 @@
 name: clone-images
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/clone-images.yml'
+
 jobs:
   build:
     strategy:
@@ -49,7 +56,3 @@ jobs:
         docker tag $DOCKERHUB_IMAGE:$ORIGINAL_TAG $ECR_DOCKER_REPOSITORY/$NEW_IMAGE:$NEW_TAG
         docker push $ECR_DOCKER_REPOSITORY/$NEW_IMAGE:$NEW_TAG
         echo "$ECR_DOCKER_REPOSITORY/$NEW_IMAGE:$NEW_TAG pushed"
-'on':
-  push:
-    branches:
-    - '*'

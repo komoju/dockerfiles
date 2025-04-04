@@ -1,4 +1,11 @@
 name: build-rails-buildpack
+
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - '.github/workflows/build-rails-buildpack.yml'
+      - '**/Dockerfile'
 jobs:
   build:
     strategy:
@@ -48,7 +55,3 @@ jobs:
         docker push $DOCKER_REPOSITORY:$IMAGE_TAG
         docker tag $DOCKER_REPOSITORY:$IMAGE_TAG $DOCKER_REPOSITORY:latest
         docker push $DOCKER_REPOSITORY:latest
-'on':
-  push:
-    branches:
-    - '*'
