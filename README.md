@@ -24,8 +24,10 @@ public.ecr.aws/degica/rails-base:3.2.3
 public.ecr.aws/degica/rails-base:3.2.4
 public.ecr.aws/degica/rails-base:3.2.6
 public.ecr.aws/degica/rails-base:3.3.1
+public.ecr.aws/degica/rails-base:3.3.7
 public.ecr.aws/degica/rails-base:3.4.0
 public.ecr.aws/degica/rails-base:3.4.1
+public.ecr.aws/degica/rails-base:3.4.2
 ```
 
 
@@ -51,10 +53,12 @@ public.ecr.aws/degica/rails-buildpack:3.2.2
 public.ecr.aws/degica/rails-buildpack:3.2.3
 public.ecr.aws/degica/rails-buildpack:3.2.4
 public.ecr.aws/degica/rails-buildpack:3.2.6
+public.ecr.aws/degica/rails-buildpack:3.2.8
 public.ecr.aws/degica/rails-buildpack:3.3.0
 public.ecr.aws/degica/rails-buildpack:3.3.1
 public.ecr.aws/degica/rails-buildpack:3.4.0
 public.ecr.aws/degica/rails-buildpack:3.4.1
+public.ecr.aws/degica/rails-buildpack:3.4.2
 ```
 
 Additional older buildpacks can be found at https://gallery.ecr.aws/degica/rails-buildpack
