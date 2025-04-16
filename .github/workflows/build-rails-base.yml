@@ -15,13 +15,13 @@ jobs:
         include:
           - ruby: '3.2.8'
             folder: '3.x' # slim bookworm for linux/amd64
-            tag: '3.2.8-slim-bookworm@sha256:640d59b33ba375a288988f6503e869b9c7a8eea7b890e57b11af00599dbee917'
-          - ruby: '3.3.7'
+            tag: '3.2.8-slim-bookworm@sha256:40c82d92c01e720b81b064d826ce7b72a539eaeed01e55110106be78b4c7c5e7'
+          - ruby: '3.3.8'
             folder: '3.x' # slim bookworm for linux/amd64
-            tag: '3.3.7-slim-bookworm@sha256:8b10c017ef1db7ed418d99829a91e31f12a0e3caea68022f3bb2c18f46c124f0'
-          - ruby: '3.4.2'
+            tag: '3.3.8-slim-bookworm@sha256:182782e8615cf731f47858a3da8f6cbf5bd60edd1d4f62bfa7cf605fc043b9b8'
+          - ruby: '3.4.3'
             folder: '3.x' # slim bookworm for linux/amd64
-            tag: '3.4.2-slim-bookworm@sha256:98e208daf93d40485edf2f5e1a1527202ae0824cdc1619b6659674a84aa197ba'
+            tag: '3.4.3-slim-bookworm@sha256:fcbc3577e23cb188d769e496e7afe639b9946a2bf47c3deac7a38ad58187f6a9'
     container:
       image: docker:git
       env:
