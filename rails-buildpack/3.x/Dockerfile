@@ -33,6 +33,7 @@ RUN apt-get update \
       gstreamer1.0-tools \
       gstreamer1.0-x \
       imagemagick \
+ && apt-get upgrade -y \
  && rm -rf /var/lib/apt/lists/*
 
 # Install Node JS
