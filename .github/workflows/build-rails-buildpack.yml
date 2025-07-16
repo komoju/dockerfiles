@@ -6,6 +6,7 @@ on:
     paths:
       - '.github/workflows/build-rails-buildpack.yml'
       - '**/Dockerfile'
+
 jobs:
   build:
     strategy:
@@ -18,9 +19,9 @@ jobs:
           - ruby: '3.3.8'
             folder: '3.x' # bookworm for linux/amd64
             tag: '3.3.8-bookworm@sha256:efddbd20dcfd2f377678292ad068583daf7a63b7b38f52db6792424f3ee43dd0'
-          - ruby: '3.4.3'
+          - ruby: '3.4.5'
             folder: '3.x' # bookworm for linux/amd64
-            tag: '3.4.3-bookworm@sha256:07c880a5e0fd72fa6cf0ff353633c488899082839578776201266e5f9fa95de0'
+            tag: '3.4.5-bookworm@sha256:3ecd9e7112a477a44badb75fc59ca65e4d384a9d58067d520a45f8a99e568663'
     container:
       image: docker:git
       env:
