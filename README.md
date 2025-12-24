@@ -17,18 +17,28 @@ rails-base contains common dependencies that our applications use. You can use `
 Here is a list of base images with older versions of Ruby:
 
 ```
+# Ruby 3.1:
 public.ecr.aws/degica/rails-base:3.1.4
+
+# Ruby 3.2:
 public.ecr.aws/degica/rails-base:3.2.1
 public.ecr.aws/degica/rails-base:3.2.2
 public.ecr.aws/degica/rails-base:3.2.3
 public.ecr.aws/degica/rails-base:3.2.4
 public.ecr.aws/degica/rails-base:3.2.6
+public.ecr.aws/degica/rails-base:3.2.8
+
+# Ruby 3.3
 public.ecr.aws/degica/rails-base:3.3.1
 public.ecr.aws/degica/rails-base:3.3.7
+public.ecr.aws/degica/rails-base:3.3.8
+
+# Ruby 3.4
 public.ecr.aws/degica/rails-base:3.4.0
 public.ecr.aws/degica/rails-base:3.4.1
 public.ecr.aws/degica/rails-base:3.4.2
 public.ecr.aws/degica/rails-base:3.4.3
+public.ecr.aws/degica/rails-base:3.4.5
 ```
 
 
@@ -42,25 +52,38 @@ You can use `rails-buildpack` for your CI or builder of a multi-stage build.
 Here is a list of buildpacks with older versions of Ruby:
 
 ```
+# Ruby 2.7
 public.ecr.aws/degica/rails-buildpack:2.7
 public.ecr.aws/degica/rails-buildpack:2.7.3
 public.ecr.aws/degica/rails-buildpack:2.7.5
 public.ecr.aws/degica/rails-buildpack:2.7.7
+
+# Ruby 3.0
 public.ecr.aws/degica/rails-buildpack:3.0
+
+# Ruby 3.1
 public.ecr.aws/degica/rails-buildpack:3.1
 public.ecr.aws/degica/rails-buildpack:3.1.4
+
+# Ruby 3.2
 public.ecr.aws/degica/rails-buildpack:3.2.1
 public.ecr.aws/degica/rails-buildpack:3.2.2
 public.ecr.aws/degica/rails-buildpack:3.2.3
 public.ecr.aws/degica/rails-buildpack:3.2.4
 public.ecr.aws/degica/rails-buildpack:3.2.6
 public.ecr.aws/degica/rails-buildpack:3.2.8
+
+# Ruby 3.3
 public.ecr.aws/degica/rails-buildpack:3.3.0
 public.ecr.aws/degica/rails-buildpack:3.3.1
+public.ecr.aws/degica/rails-buildpack:3.3.8
+
+# Ruby 3.4
 public.ecr.aws/degica/rails-buildpack:3.4.0
 public.ecr.aws/degica/rails-buildpack:3.4.1
 public.ecr.aws/degica/rails-buildpack:3.4.2
 public.ecr.aws/degica/rails-buildpack:3.4.3
+public.ecr.aws/degica/rails-buildpack:3.4.5
 ```
 
 Additional older buildpacks can be found at https://gallery.ecr.aws/degica/rails-buildpack
