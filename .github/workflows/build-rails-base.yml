@@ -13,18 +13,18 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - ruby: '3.2.9'
+          - ruby: '3.2.11'
             folder: '3.x' # slim bookworm for linux/amd64
-            tag: '3.2.9-slim-bookworm@sha256:f1435a30f23336714d85202d368a02853545cc08f9a6005da004dc34a267d718'
-          - ruby: '3.3.10'
+            tag: '3.2.11-slim-bookworm@sha256:1bb3b14e4cbf883f50c92bf48efdeea2126e5a2de4764c13cd7b78fb36e71052'
+          - ruby: '3.3.11'
             folder: '3.x' # slim bookworm for linux/amd64
-            tag: '3.3.10-slim-bookworm@sha256:66ea2735195c93ab9e33dd238c7a017afe2bcfd822b0a8d2a4d9a9b0bf61f187'
-          - ruby: '3.4.8'
+            tag: '3.3.11-slim-bookworm@sha256:95f7e890438560486113d1adcf0791575f90c4e02145c6dab0bc4b6b0a2bd024'
+          - ruby: '3.4.9'
             folder: '3.x' # slim bookworm for linux/amd64
-            tag: '3.4.8-slim-bookworm@sha256:9eb304d8ca9d3eeb32a5a5a39b080b295489735510fa832ababb7ffcc079bb57'
-          - ruby: '4.0.1'
+            tag: '3.4.9-slim-bookworm@sha256:510c441d2541a5ef8c6a657a67ae98d5b0c6acdd886691690ed30f986095f55e'
+          - ruby: '4.0.2'
             folder: '4.x' # slim bookworm for linux/amd64
-            tag: '4.0.1-slim-bookworm@sha256:9cc5aa4190d2d7be08d6a93fdd8485fb1e9ea4e7298dc4afb02118fd70d28b95'
+            tag: '4.0.2-slim-bookworm@sha256:5ecc25c47ed7b9c75c24fb81fe92b474e4aae42742bca2845b69b22ee5632e2e'
     container:
       image: docker:git
       env:
