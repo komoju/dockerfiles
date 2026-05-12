@@ -22,9 +22,9 @@ jobs:
           - ruby: '3.4.9'
             folder: '3.x' # slim bookworm for linux/amd64
             tag: '3.4.9-slim-bookworm@sha256:510c441d2541a5ef8c6a657a67ae98d5b0c6acdd886691690ed30f986095f55e'
-          - ruby: '4.0.3'
+          - ruby: '4.0.4'
             folder: '4.x' # slim bookworm for linux/amd64
-            tag: '4.0.3-slim-bookworm@sha256:d08e29eddfcccbc48c8cb4c148fee6ad39d0cb0e20de4a0fab6dfd17221b3df5'
+            tag: '4.0.4-slim-bookworm@sha256:a9d95f9aa853c0d818f9f9b31f536adb24fb83d866e8fd1a4d3fcc5a2f229193'
     container:
       image: docker:git
       env:
