@@ -23,6 +23,7 @@ RUN apt-get update \
       default-libmysqlclient-dev \
       libxslt1.1 \
       libxml2 \
+      libjemalloc2 \
  && curl -sL https://deb.nodesource.com/setup_lts.x | bash - \
  && apt-get update \
  && apt-get install -y --no-install-recommends nodejs \
@@ -32,3 +33,7 @@ RUN apt-get update \
 RUN echo '#!/bin/bash\nxvfb-run -a --server-args="-screen 0, 1024x768x24" /usr/bin/wkhtmltopdf --enable-local-file-access -q $*' > /usr/bin/wkhtmltopdf.sh && \
     chmod a+x /usr/bin/wkhtmltopdf.sh && \
     ln -s /usr/bin/wkhtmltopdf.sh /usr/local/bin/wkhtmltopdf
+
+# jemalloc settings
+ENV LD_PRELOAD=libjemalloc.so.2
+ENV MALLOC_CONF='dirty_decay_ms:1000,narenas:2,background_thread:true'
