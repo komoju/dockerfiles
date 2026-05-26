@@ -7,6 +7,14 @@ on:
       - '.github/workflows/build-rails-buildpack.yml'
       - '**/Dockerfile'
 
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  ECR_REGISTRY: public.ecr.aws
+  ECR_REPOSITORY: degica/rails-buildpack
+
 jobs:
   build:
     strategy:
@@ -25,37 +33,37 @@ jobs:
           - ruby: '4.0.4'
             folder: '4.x' # bookworm for linux/amd64
             tag: '4.0.4-bookworm@sha256:d0447ec9bef270a7f7a0b0be3410813fd184d56cfe39775e7c7c897fb2023c5d'
-    container:
-      image: docker:git
-      env:
-        DOCKER_REPOSITORY: public.ecr.aws/degica/rails-buildpack
-        DOCKER_BUILDKIT: '1'
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
     runs-on: ubuntu-latest
     steps:
-    - name: prepare
-      run: |-
-        apk add --no-cache python3 py3-pip
-        pip3 install --break-system-packages --upgrade pip
-        pip3 install --break-system-packages awscli
-    - name: workaround git security
-      run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-    - uses: actions/checkout@v3
-    - name: setup
-      run: git submodule update --init
-    - name: build_and_push
-      run: |-
-        cd rails-buildpack/${{ matrix.folder }}
-        if [[ ${GITHUB_REF##*/} == 'master' ]]; then
-            IMAGE_TAG=${{ matrix.ruby }}
-        else
-            IMAGE_TAG=test-${GITHUB_REF##*/}-${{ matrix.ruby }} # branch name for dev usecases
-        fi
-        aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/degica
-        docker build . -t $DOCKER_REPOSITORY:$IMAGE_TAG --build-arg RUBY_TAG=${{ matrix.tag }} --pull
-        docker images
-        docker push $DOCKER_REPOSITORY:$IMAGE_TAG
-        docker tag $DOCKER_REPOSITORY:$IMAGE_TAG $DOCKER_REPOSITORY:latest
-        docker push $DOCKER_REPOSITORY:latest
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@4d04d5d9486b7bd6fa91e7baf45bbb4f8b9deedd # v4.0.0
+
+      - name: Configure AWS credentials for Public ECR
+        uses: aws-actions/configure-aws-credentials@d979d5b3a71173a29b74b5b88418bfda9437d885 # v6.1.1
+        with:
+          role-to-assume: ${{ secrets.PUBLIC_ECR_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Public ECR
+        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4.1.0
+        with:
+          registry: ${{ env.ECR_REGISTRY }}
+
+      - name: Construct image tag
+        id: image-tag
+        run: |
+          if [[ ${GITHUB_REF##*/} == 'master' ]]; then
+            echo "tag=${{ matrix.ruby }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "tag=test-${GITHUB_REF##*/}-${{ matrix.ruby }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Build and push container image
+        uses: docker/build-push-action@bcafcacb16a39f128d818304e6c9c0c18556b85f # v7.1.0
+        with:
+          context: "{{defaultContext}}:rails-buildpack/${{ matrix.folder }}"
+          build-args: RUBY_TAG=${{ matrix.tag }}
+          push: true
+          tags: |
+            ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ steps.image-tag.outputs.tag }}
+            ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:latest

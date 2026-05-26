@@ -6,8 +6,14 @@ on:
     paths:
       - '.github/workflows/clone-images.yml'
 
+permissions:
+  id-token: write
+
+env:
+  ECR_REGISTRY: public.ecr.aws
+
 jobs:
-  build:
+  mirror:
     strategy:
       matrix:
         include:
@@ -21,38 +27,42 @@ jobs:
             tag: "3.141.59"
           - image: "degicigel/echo"
             tag: "1.0"
-    container:
-      image: docker:git
-      env:
-        ECR_DOCKER_REPOSITORY: public.ecr.aws/degica
-        DOCKER_BUILDKIT: '1'
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: ${{ secrets.AWS_DEFAULT_REGION }}
     runs-on: ubuntu-latest
     steps:
-    - name: prepare
-      run: |-
-        apk add --no-cache python3 py3-pip
-        pip3 install --break-system-packages --upgrade pip
-        pip3 install --break-system-packages awscli
-    - name: workaround git security
-      run: git config --global --add safe.directory "$GITHUB_WORKSPACE"
-    - uses: actions/checkout@v3
-    - name: setup
-      run: git submodule update --init
-    - name: pull_and_push
-      run: |-
-        DOCKERHUB_IMAGE="${{ matrix.image }}"
-        ORIGINAL_TAG="${{ matrix.tag }}"
-        NEW_IMAGE=`echo "${{ matrix.image }}" | sed 's/\//-/'`
-        if [[ ${GITHUB_REF##*/} == 'master' ]]; then
-            NEW_TAG=$ORIGINAL_TAG
-        else
-            NEW_TAG=test-${GITHUB_REF##*/}-$ORIGINAL_TAG # branch name for dev usecases
-        fi
-        aws ecr-public get-login-password --region us-east-1 | docker login --username AWS --password-stdin public.ecr.aws/degica
-        docker pull $DOCKERHUB_IMAGE:$ORIGINAL_TAG
-        docker tag $DOCKERHUB_IMAGE:$ORIGINAL_TAG $ECR_DOCKER_REPOSITORY/$NEW_IMAGE:$NEW_TAG
-        docker push $ECR_DOCKER_REPOSITORY/$NEW_IMAGE:$NEW_TAG
-        echo "$ECR_DOCKER_REPOSITORY/$NEW_IMAGE:$NEW_TAG pushed"
+      - name: Configure AWS credentials for Public ECR
+        uses: aws-actions/configure-aws-credentials@d979d5b3a71173a29b74b5b88418bfda9437d885 # v6.1.1
+        with:
+          role-to-assume: ${{ secrets.PUBLIC_ECR_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Public ECR
+        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4.1.0
+        with:
+          registry: ${{ env.ECR_REGISTRY }}
+
+      - name: Construct image tag
+        id: image-tag
+        run: |
+          DOCKERHUB_IMAGE="${{ matrix.image }}"
+          ORIGINAL_TAG="${{ matrix.tag }}"
+          if [[ ${GITHUB_REF##*/} == 'master' ]]; then
+            echo "tag=$ORIGINAL_TAG" >> "$GITHUB_OUTPUT"
+          else
+            echo "tag=test-${GITHUB_REF##*/}-$ORIGINAL_TAG" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Construct image name
+        id: image-name
+        run: |
+          IMAGE_NAME=`echo "${{ matrix.image }}" | sed 's/\//-/'`
+          echo "name=$IMAGE_NAME" >> "$GITHUB_OUTPUT"
+
+      - name: Pull and push container image
+        env:
+          SOURCE_IMAGE: ${{ matrix.image }}:${{ matrix.tag }}
+          DESTINATION_IMAGE: ${{ env.ECR_REGISTRY }}/degica/${{ steps.image-name.outputs.name }}:${{ steps.image-tag.outputs.tag }}
+        run: |
+          docker pull $SOURCE_IMAGE
+          docker tag $SOURCE_IMAGE $DESTINATION_IMAGE
+          docker push $DESTINATION_IMAGE
+          echo "$DESTINATION_IMAGE pushed"
