@@ -30,9 +30,9 @@ jobs:
           - ruby: '3.4.9'
             folder: '3.x' # bookworm for linux/amd64
             tag: '3.4.9-bookworm@sha256:e467a23bc24df75574b42ada7e034b38dc0e7cc52a02a911e02a75d824e0e2a6'
-          - ruby: '4.0.5'
+          - ruby: '4.0.6'
             folder: '4.x' # bookworm for linux/amd64
-            tag: '4.0.5-bookworm@sha256:f46173257f230bf32b334f8fc0147c450f0062fb44945674c7a084611ffe54aa'
+            tag: '4.0.6-bookworm@sha256:9aa2c82911e6e22fc4a9a4b100bef0cf8949aeb9cd08946574ed4ff4fb61f2a1'
     runs-on: ubuntu-latest
     steps:
       - name: Setup Docker Buildx
