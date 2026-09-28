@@ -15,7 +15,7 @@ When the user asks to add, build, or update a Ruby version (e.g. "add Ruby 3.4.1
 
 ### 1. Get the target version
 
-If the user did not already specify the version, ask them using `AskUserQuestion`. Expect a full `MAJOR.MINOR.PATCH` (e.g. `3.4.10`, `4.0.5`). Extract:
+If the user did not already specify the version, ask them for a full `MAJOR.MINOR.PATCH` (e.g. `3.4.10`, `4.0.5`). Extract:
 
 - `version` — the full version string (e.g. `3.4.10`)
 - `major_minor` — the first two components joined with a dot (e.g. `3.4`)
@@ -28,7 +28,7 @@ The two workflows use different tag suffixes:
 - `build-rails-base.yml` uses `<version>-slim-bookworm` (the slim variant)
 - `build-rails-buildpack.yml` uses `<version>-bookworm` (full variant)
 
-Both entries in the workflow encode the **multi-arch manifest list digest** (the top-level `digest` field returned by the Docker Hub Registry API). Fetch both in parallel using two Bash calls:
+Both entries in the workflow encode the **multi-arch manifest list digest** (the top-level `digest` field returned by the Docker Hub Registry API). Fetch both in parallel with shell requests:
 
 ```bash
 curl -fsS "https://hub.docker.com/v2/repositories/library/ruby/tags/<version>-slim-bookworm/" \
@@ -54,7 +54,7 @@ Replace the entry in-place. The format must remain exactly:
             tag: '<version>-slim-bookworm@<digest-from-step-2>'
 ```
 
-Use `Edit` with enough surrounding context to make the `old_string` unique. Keep the indentation (10 spaces before `- ruby:`, 12 spaces before the other two keys) and the inline comment exactly as shown.
+Edit the entry in-place, preserving the surrounding format, indentation (10 spaces before `- ruby:`, 12 spaces before the other two keys), and inline comment exactly as shown.
 
 If no matrix entry matches the `major_minor`, stop and ask the user how to proceed (this means a brand-new minor line is being introduced — the skill's "replace" behavior doesn't apply, and the user should decide whether to add a fifth matrix entry instead).
 
