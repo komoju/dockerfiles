@@ -1,0 +1,151 @@
+name: patch-emudhra-ca
+
+on:
+  workflow_dispatch:
+    inputs:
+      push:
+        description: 'Push patched images (otherwise build and verify only)'
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  id-token: write
+
+env:
+  ECR_REGISTRY: public.ecr.aws
+
+jobs:
+  patch:
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        include:
+          - { repository: rails-base, tag: '3.1.4' }
+          - { repository: rails-base, tag: '3.2.1' }
+          - { repository: rails-base, tag: '3.2.2' }
+          - { repository: rails-base, tag: '3.2.3' }
+          - { repository: rails-base, tag: '3.2.4' }
+          - { repository: rails-base, tag: '3.2.6' }
+          - { repository: rails-base, tag: '3.2.8' }
+          - { repository: rails-base, tag: '3.2.9' }
+          - { repository: rails-base, tag: '3.2.11' }
+          - { repository: rails-base, tag: '3.3.1' }
+          - { repository: rails-base, tag: '3.3.7' }
+          - { repository: rails-base, tag: '3.3.8' }
+          - { repository: rails-base, tag: '3.3.10' }
+          - { repository: rails-base, tag: '3.3.11' }
+          - { repository: rails-base, tag: '3.4.0' }
+          - { repository: rails-base, tag: '3.4.1' }
+          - { repository: rails-base, tag: '3.4.2' }
+          - { repository: rails-base, tag: '3.4.3' }
+          - { repository: rails-base, tag: '3.4.5' }
+          - { repository: rails-base, tag: '3.4.8' }
+          - { repository: rails-base, tag: '3.4.9' }
+          - { repository: rails-base, tag: '3.4.11' }
+          - { repository: rails-base, tag: '4.0.0' }
+          - { repository: rails-base, tag: '4.0.1' }
+          - { repository: rails-base, tag: '4.0.2' }
+          - { repository: rails-base, tag: '4.0.3' }
+          - { repository: rails-base, tag: '4.0.5' }
+          - { repository: rails-base, tag: '4.0.6' }
+          - { repository: rails-base, tag: '4.0.7' }
+          - { repository: rails-buildpack, tag: '2.7' }
+          - { repository: rails-buildpack, tag: '2.7.3' }
+          - { repository: rails-buildpack, tag: '2.7.5' }
+          - { repository: rails-buildpack, tag: '2.7.7' }
+          - { repository: rails-buildpack, tag: '3.0' }
+          - { repository: rails-buildpack, tag: '3.1' }
+          - { repository: rails-buildpack, tag: '3.1.4' }
+          - { repository: rails-buildpack, tag: '3.2.1' }
+          - { repository: rails-buildpack, tag: '3.2.2' }
+          - { repository: rails-buildpack, tag: '3.2.3' }
+          - { repository: rails-buildpack, tag: '3.2.4' }
+          - { repository: rails-buildpack, tag: '3.2.6' }
+          - { repository: rails-buildpack, tag: '3.2.8' }
+          - { repository: rails-buildpack, tag: '3.2.9' }
+          - { repository: rails-buildpack, tag: '3.2.11' }
+          - { repository: rails-buildpack, tag: '3.3.0' }
+          - { repository: rails-buildpack, tag: '3.3.1' }
+          - { repository: rails-buildpack, tag: '3.3.8' }
+          - { repository: rails-buildpack, tag: '3.3.10' }
+          - { repository: rails-buildpack, tag: '3.3.11' }
+          - { repository: rails-buildpack, tag: '3.4.0' }
+          - { repository: rails-buildpack, tag: '3.4.1' }
+          - { repository: rails-buildpack, tag: '3.4.2' }
+          - { repository: rails-buildpack, tag: '3.4.3' }
+          - { repository: rails-buildpack, tag: '3.4.5' }
+          - { repository: rails-buildpack, tag: '3.4.8' }
+          - { repository: rails-buildpack, tag: '3.4.9' }
+          - { repository: rails-buildpack, tag: '3.4.11' }
+          - { repository: rails-buildpack, tag: '4.0.0' }
+          - { repository: rails-buildpack, tag: '4.0.1' }
+          - { repository: rails-buildpack, tag: '4.0.2' }
+          - { repository: rails-buildpack, tag: '4.0.3' }
+          - { repository: rails-buildpack, tag: '4.0.5' }
+          - { repository: rails-buildpack, tag: '4.0.6' }
+          - { repository: rails-buildpack, tag: '4.0.7' }
+    runs-on: ubuntu-latest
+    env:
+      IMAGE: public.ecr.aws/degica/${{ matrix.repository }}
+      TAG: ${{ matrix.tag }}
+    steps:
+      - name: Checkout
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+
+      - name: Configure AWS credentials for Public ECR
+        uses: aws-actions/configure-aws-credentials@d979d5b3a71173a29b74b5b88418bfda9437d885 # v6.1.1
+        with:
+          role-to-assume: ${{ secrets.PUBLIC_ECR_ROLE }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Login to Public ECR
+        uses: docker/login-action@4907a6ddec9925e35a0a9e82d7399ccc52663121 # v4.1.0
+        with:
+          registry: ${{ env.ECR_REGISTRY }}
+
+      # Always patch the original image, which is kept under a backup tag once
+      # the patched image has been pushed.
+      - name: Resolve source image
+        id: source
+        run: |
+          BACKUP_TAG="$TAG-pre-emudhra"
+          if docker buildx imagetools inspect "$IMAGE:$BACKUP_TAG" > /dev/null 2>&1; then
+            SOURCE_TAG="$BACKUP_TAG"
+          else
+            SOURCE_TAG="$TAG"
+          fi
+
+          DIGEST=$(docker buildx imagetools inspect "$IMAGE:$SOURCE_TAG" --format '{{json .Manifest}}' | jq -r .digest)
+          echo "Patching $IMAGE:$SOURCE_TAG ($DIGEST)"
+
+          {
+            echo "backup-tag=$BACKUP_TAG"
+            echo "source-tag=$SOURCE_TAG"
+            echo "image=$IMAGE@$DIGEST"
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Check source image (expected to fail)
+        continue-on-error: true
+        run: docker run --rm -v "$PWD/emudhra-patch/verify.sh:/verify.sh:ro" "${{ steps.source.outputs.image }}" sh /verify.sh
+
+      - name: Build patched image
+        run: |
+          docker build \
+            --platform linux/amd64 \
+            --build-arg SOURCE_IMAGE="${{ steps.source.outputs.image }}" \
+            -f emudhra-patch/patch.Dockerfile \
+            -t "$IMAGE:$TAG" \
+            emudhra-patch
+
+      - name: Verify patched image
+        run: docker run --rm -v "$PWD/emudhra-patch/verify.sh:/verify.sh:ro" "$IMAGE:$TAG" sh /verify.sh
+
+      - name: Back up source image
+        if: inputs.push && steps.source.outputs.source-tag == matrix.tag
+        run: docker buildx imagetools create -t "$IMAGE:${{ steps.source.outputs.backup-tag }}" "${{ steps.source.outputs.image }}"
+
+      - name: Push patched image
+        if: inputs.push
+        run: docker push "$IMAGE:$TAG"

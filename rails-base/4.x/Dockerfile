@@ -24,6 +24,7 @@ RUN apt-get update \
       libxslt1.1 \
       libxml2 \
       libjemalloc2 \
+ && apt-get upgrade -y \
  && curl -sL https://deb.nodesource.com/setup_lts.x | bash - \
  && apt-get update \
  && apt-get install -y --no-install-recommends nodejs \
