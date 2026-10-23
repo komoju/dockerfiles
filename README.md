@@ -51,6 +51,7 @@ public.ecr.aws/degica/rails-base:4.0.2
 public.ecr.aws/degica/rails-base:4.0.3
 public.ecr.aws/degica/rails-base:4.0.5
 public.ecr.aws/degica/rails-base:4.0.6
+public.ecr.aws/degica/rails-base:4.0.7
 ```
 
 
@@ -108,6 +109,7 @@ public.ecr.aws/degica/rails-buildpack:4.0.2
 public.ecr.aws/degica/rails-buildpack:4.0.3
 public.ecr.aws/degica/rails-buildpack:4.0.5
 public.ecr.aws/degica/rails-buildpack:4.0.6
+public.ecr.aws/degica/rails-buildpack:4.0.7
 ```
 
 Additional older buildpacks can be found at https://gallery.ecr.aws/degica/rails-buildpack
