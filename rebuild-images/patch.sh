@@ -3,12 +3,12 @@ set -eu
 
 . /etc/os-release
 
-# Pull the patched ca-certificates and Node.js releases where the distro still
-# ships security updates.
+# Pull the patched ca-certificates, Brotli, and Node.js releases where the
+# distro still ships security updates.
 case "$VERSION_CODENAME" in
   bookworm|trixie)
     apt-get update
-    apt-get install -y --no-install-recommends --only-upgrade ca-certificates nodejs
+    apt-get install -y --no-install-recommends --only-upgrade ca-certificates libbrotli1 libbrotli-dev nodejs
     rm -rf /var/lib/apt/lists/*
     ;;
 esac
