@@ -24,15 +24,15 @@ jobs:
           - ruby: '3.2.11'
             folder: '3.x' # bookworm for linux/amd64
             tag: '3.2.11-bookworm@sha256:d68250c0e3974511b6b8d489afb9a5e8e45aadd41dd841f6e035f7c4c03f1a54'
-          - ruby: '3.3.11'
+          - ruby: '3.3.13'
             folder: '3.x' # bookworm for linux/amd64
-            tag: '3.3.11-bookworm@sha256:cdf1bbc7daaef640c62e834fa624c831b00ebb2dbf0b522e3bc43db97aa878c7'
-          - ruby: '3.4.11'
+            tag: '3.3.13-bookworm@sha256:f408fb7e09490420cdb07ed0eccecc4b55f1dd704e871e0a729d1ea5b44b7d87'
+          - ruby: '3.4.12'
             folder: '3.x' # bookworm for linux/amd64
-            tag: '3.4.11-bookworm@sha256:246b2dc3f6e40bba3af18503c22997a34dbb27c9f97e198dde6dd727895115c5'
-          - ruby: '4.0.8'
+            tag: '3.4.12-bookworm@sha256:fb621bafe125c450672c77ab13e7378f10f472eb0d0ee81dc63c656a660008ba'
+          - ruby: '4.0.9'
             folder: '4.x' # bookworm for linux/amd64
-            tag: '4.0.8-bookworm@sha256:77a29c1e95e0950e6977d4979c8a2918cda220360bee3248d75089146aaebf69'
+            tag: '4.0.9-bookworm@sha256:fee20098407d5b0f7a56a29eead2cebaee18028389771bddb1ef135872ec216d'
     runs-on: ubuntu-latest
     steps:
       - name: Setup Docker Buildx
