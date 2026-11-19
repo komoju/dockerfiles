@@ -37,6 +37,7 @@ jobs:
           - { repository: rails-base, tag: '3.3.10' }
           - { repository: rails-base, tag: '3.3.11' }
           - { repository: rails-base, tag: '3.3.13' }
+          - { repository: rails-base, tag: '3.3.14' }
           - { repository: rails-base, tag: '3.4.0' }
           - { repository: rails-base, tag: '3.4.1' }
           - { repository: rails-base, tag: '3.4.2' }
@@ -46,6 +47,7 @@ jobs:
           - { repository: rails-base, tag: '3.4.9' }
           - { repository: rails-base, tag: '3.4.11' }
           - { repository: rails-base, tag: '3.4.12' }
+          - { repository: rails-base, tag: '3.4.13' }
           - { repository: rails-base, tag: '4.0.0' }
           - { repository: rails-base, tag: '4.0.1' }
           - { repository: rails-base, tag: '4.0.2' }
@@ -55,6 +57,7 @@ jobs:
           - { repository: rails-base, tag: '4.0.7' }
           - { repository: rails-base, tag: '4.0.8' }
           - { repository: rails-base, tag: '4.0.9' }
+          - { repository: rails-base, tag: '4.0.10' }
           - { repository: rails-buildpack, tag: '2.7' }
           - { repository: rails-buildpack, tag: '2.7.3' }
           - { repository: rails-buildpack, tag: '2.7.5' }
@@ -76,6 +79,7 @@ jobs:
           - { repository: rails-buildpack, tag: '3.3.10' }
           - { repository: rails-buildpack, tag: '3.3.11' }
           - { repository: rails-buildpack, tag: '3.3.13' }
+          - { repository: rails-buildpack, tag: '3.3.14' }
           - { repository: rails-buildpack, tag: '3.4.0' }
           - { repository: rails-buildpack, tag: '3.4.1' }
           - { repository: rails-buildpack, tag: '3.4.2' }
@@ -85,6 +89,7 @@ jobs:
           - { repository: rails-buildpack, tag: '3.4.9' }
           - { repository: rails-buildpack, tag: '3.4.11' }
           - { repository: rails-buildpack, tag: '3.4.12' }
+          - { repository: rails-buildpack, tag: '3.4.13' }
           - { repository: rails-buildpack, tag: '4.0.0' }
           - { repository: rails-buildpack, tag: '4.0.1' }
           - { repository: rails-buildpack, tag: '4.0.2' }
@@ -94,6 +99,7 @@ jobs:
           - { repository: rails-buildpack, tag: '4.0.7' }
           - { repository: rails-buildpack, tag: '4.0.8' }
           - { repository: rails-buildpack, tag: '4.0.9' }
+          - { repository: rails-buildpack, tag: '4.0.10' }
     runs-on: ubuntu-latest
     env:
       IMAGE: public.ecr.aws/degica/${{ matrix.repository }}
