@@ -24,15 +24,15 @@ jobs:
           - ruby: '3.2.11'
             folder: '3.x' # slim bookworm for linux/amd64
             tag: '3.2.11-slim-bookworm@sha256:1bb3b14e4cbf883f50c92bf48efdeea2126e5a2de4764c13cd7b78fb36e71052'
-          - ruby: '3.3.13'
+          - ruby: '3.3.14'
             folder: '3.x' # slim bookworm for linux/amd64
-            tag: '3.3.13-slim-bookworm@sha256:885142fb5138e80bd09fc81a7799356c967e28c97da6a710c74a23c5f39830f1'
-          - ruby: '3.4.12'
+            tag: '3.3.14-slim-bookworm@sha256:93bd696eacf81ff83df0e44746fb7ad90b5c8ba6343531339e517d1fd2331132'
+          - ruby: '3.4.13'
             folder: '3.x' # slim bookworm for linux/amd64
-            tag: '3.4.12-slim-bookworm@sha256:763447970212036899305a7fbcf2ac67d501671e050b53e4ea998d18c62ce71a'
-          - ruby: '4.0.9'
+            tag: '3.4.13-slim-bookworm@sha256:90edfa6247ae01084ba267a77f5d610f62af8f83daf460c58d583069e788f7de'
+          - ruby: '4.0.10'
             folder: '4.x' # slim bookworm for linux/amd64
-            tag: '4.0.9-slim-bookworm@sha256:3fbe94d9407cf1feb42ba4285e857fa0a3ca970d77c0dc400d425af83852891a'
+            tag: '4.0.10-slim-bookworm@sha256:a280bf6cdedd52dab929a96a874a562b8642807ee090d100d8478c6540b99b89'
     runs-on: ubuntu-latest
     steps:
       - name: Setup Docker Buildx
